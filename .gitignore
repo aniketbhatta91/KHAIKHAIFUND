@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# App data / local artifacts
+fund.db
+fund.db-journal
+*.log
+server.log
+
+# OS
+.DS_Store
+Thumbs.db

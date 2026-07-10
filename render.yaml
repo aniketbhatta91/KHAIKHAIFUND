@@ -1,0 +1,28 @@
+# Render Blueprint — deploy with one click from a Git repo.
+# https://render.com  ->  New  ->  Blueprint  ->  pick your repo.
+#
+# This provisions a free Postgres database and a web service, and injects the
+# database connection string into the app as DATABASE_URL. With DATABASE_URL
+# set, the app stores data in Postgres (durable). Locally, with no
+# DATABASE_URL, it falls back to a SQLite file automatically.
+
+databases:
+  - name: khaikhai-db
+    plan: free
+    databaseName: khaikhai
+    user: khaikhai
+
+services:
+  - type: web
+    name: khaikhai-fund
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: khaikhai-db
+          property: connectionString
